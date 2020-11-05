@@ -19,7 +19,7 @@ namespace BAI
         }
         public static uint Vermogen(uint b)
         {
-            // 0 = 0b00 1 = 0b01 2 = 0b10 3 = 0b11
+            // 0 = 0b00 1 = 0b01 2 = 0b10 3 = 0b11 
             switch (b >> 5 & 0b11) {
                 case (0b00):
                     return 0;
@@ -54,8 +54,8 @@ namespace BAI
         }
         public static uint ID(uint b)
         {
-            var test =  (b & 0b111);
-            return test;
+            //var test =  (b & 0b111);
+            return (b & 0b111);
         }
 
         public static HashSet<uint> Alle(List<uint> inputStroom)
@@ -99,13 +99,13 @@ namespace BAI
 
         public static HashSet<uint> Opg3a(List<uint> inputStroom)
         {
-            HashSet<uint> set = new HashSet<uint>();
-            foreach (uint item in inputStroom) {
-                if (ID(item) < 3 && !Licht(item)) {
-                    set.Add(item);
-                }
-            }
-            return set;
+            HashSet<uint> setZonderLicht = ZonderLicht(inputStroom);
+            HashSet<uint> setSelecteerID = SelecteerID(inputStroom, 0, 2);
+
+            // Adds items from setSelecteerID in setZonderLicht
+            setZonderLicht.IntersectWith(setSelecteerID);
+
+            return setZonderLicht;
         }
 
         public static HashSet<uint> Opg3b(List<uint> inputStroom)
@@ -113,7 +113,7 @@ namespace BAI
             HashSet<uint> setAlle = Alle(inputStroom);
             HashSet<uint> set3A = Opg3a(inputStroom);
 
-            // Haal alle getallen met een match uit HashSet setAlle
+            // Haal alle getallen met een match uit HashSet setAlle, dus lager dan 3 en WEL licht
             setAlle.ExceptWith(set3A);
 
             return setAlle;
